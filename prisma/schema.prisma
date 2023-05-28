@@ -11,19 +11,24 @@ datasource db {
 }
 
 model Users {
-  id       Int    @id @default(autoincrement())
-  username String
-  email    String @unique
-  password String
+  id        Int     @id @default(autoincrement())
+  username  String
+  email     String  @unique
+  password  String
+  notes     Notes[]  // Define a one-to-many relation to the Notes table
 
   @@map("users")
 }
 
 model Notes {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   url         String?
   description String
-
+  userId      Int      // Add a foreign key to reference the Users table
+  user        Users    @relation(fields: [userId], references: [id])
   @@map("notes")
 }
+
+
+
