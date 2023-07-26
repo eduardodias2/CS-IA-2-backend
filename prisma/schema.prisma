@@ -15,7 +15,7 @@ model Users {
   username  String
   email     String  @unique
   password  String
-  notes     Notes[]  // Define a one-to-many relation to the Notes table
+  notes     Notes[]  // one-to-many relation on prisma
 
   @@map("users")
 }
@@ -25,10 +25,7 @@ model Notes {
   title       String
   url         String?
   description String
-  userId      Int      // Add a foreign key to reference the Users table
+  userId      Int      // add id key from users to this table
   user        Users    @relation(fields: [userId], references: [id])
   @@map("notes")
 }
-
-
-
