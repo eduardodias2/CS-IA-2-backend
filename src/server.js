@@ -29,7 +29,6 @@ app.post("/register", async (req, res) => {
 app.post("/notes", auth, async (req, res) => {
   const data = req.body;
   data.userId = req.user.id;
-  console.log("create note", data);
   const createNote = await prisma.notes.create({
     data,
   });
@@ -37,13 +36,11 @@ app.post("/notes", auth, async (req, res) => {
 });
 
 app.get("/notes", auth, async (req, res) => {
-  console.log("get notes", req.user);
   const notes = await prisma.notes.findMany({
     where: {
       userId: req.user.id,
     },
   });
-  console.log(notes)
   return res.json({ data: notes });
 });
 
@@ -78,22 +75,24 @@ app.delete("/notes/:id", async (req, res) => {
     return res.status(404).json({quote: "Error 404: Not Found"});
   }
 });
-app.put("/notes/:id"), async (req, res) => {
+app.put("/notes/:id", async (req, res) => {
   const { id } = req.params;
+  console.log(id)
+  const { title, url, description } = req.body;
   try {
     await prisma.notes.update({
       where: {
         id: parseInt(id),
       },
       data: {
-        title,
-        url,
-        description,
+        title: title,
+        description: description,
+        url: url,
       }
     });
     return res.status(200).json({msg: "OK"});
   } catch (error) {
     console.log(error)
-    return res.status(404).json({msg: "Error 404: Not Found"})
+    return res.status(303).json({msg: "Error 404: Not Found"})
   }
-}
+});
